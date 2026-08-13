@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: accounts-service
-          image: arsr319/finoxa-accounts-service:1.0.0
+          image: arsr319/finovra-accounts-service:1.0.0
           ports:
             - containerPort: 8000
           env:

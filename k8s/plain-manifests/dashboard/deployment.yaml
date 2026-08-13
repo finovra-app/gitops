@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: arsr319/finoxa-dashboard:1.0.0
+          image: arsr319/finovra-dashboard:1.0.0
           ports:
             - containerPort: 3000
           env:

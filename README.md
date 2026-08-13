@@ -1,8 +1,8 @@
-# Finoxa — GitOps Config Repo
+# Finovra — GitOps Config Repo
 
-This repo holds everything ArgoCD needs for Finoxa: the `Application`
+This repo holds everything ArgoCD needs for Finovra: the `Application`
 definition and the Kubernetes manifests it deploys. It's deliberately
-separate from [`finoxa-app`](https://github.com/finoxa-argocd/finoxa-app),
+separate from [`webapp`](https://github.com/finovra-app/webapp),
 which holds the application source code and Dockerfiles — a standard
 "app repo vs. config repo" split used by most real GitOps teams.
 
@@ -11,7 +11,7 @@ which holds the application source code and Dockerfiles — a standard
 ```
 gitops/
 ├── apps/
-│   └── finoxa.yaml              # the ArgoCD Application resource
+│   └── finovra.yaml              # the ArgoCD Application resource
 └── k8s/
     └── plain-manifests/
         ├── dashboard/            # Deployment + Service
@@ -22,7 +22,7 @@ gitops/
 
 ## Why two repos?
 
-- **`finoxa-app`** changes when the *application* changes — new code, a new
+- **`webapp`** changes when the *application* changes — new code, a new
   Docker image tag. Its natural audience later in the course is CI (Module 6).
 - **`gitops`** changes when the *desired state of the cluster* changes — a new
   manifest, a replica count, a sync policy tweak. Its audience is ArgoCD.
@@ -35,7 +35,7 @@ a manifest edit never has to touch application code — each repo has one job.
 Apply the Application once:
 
 ```bash
-kubectl apply -f apps/finoxa.yaml
+kubectl apply -f apps/finovra.yaml
 ```
 
 From there, ArgoCD watches `k8s/plain-manifests/` in this repo. Everything
