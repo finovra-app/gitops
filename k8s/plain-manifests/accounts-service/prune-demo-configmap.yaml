@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: finoxa-prune-demo
+  labels:
+    app: dashboard
+data:
+  note: "temporary - created to demo prune"
