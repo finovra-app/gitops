@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investments-service
+  labels:
+    app: investments-service
+spec:
+  replicas: {{ (index .Values "investments-service").replicas }}
+  selector:
+    matchLabels:
+      app: investments-service
+  template:
+    metadata:
+      labels:
+        app: investments-service
+    spec:
+      containers:
+        - name: investments-service
+          image: "{{ .Values.image.repository }}/finovra-investments-service:{{ (index .Values "investments-service").image.tag | default .Values.image.tag }}"
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PORT
+              value: "8000"
+            - name: VERSION
+              value: "{{ (index .Values "investments-service").image.tag | default .Values.image.tag }}"
+            - name: FAIL_MODE
+              value: "false"
+            - name: LATENCY_MS
+              value: "0"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+          resources:
+            {{- toYaml (index .Values "investments-service").resources | nindent 12 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: investments-service
+  labels:
+    app: investments-service
+spec:
+  selector:
+    app: investments-service
+  ports:
+    - port: 8000
+      targetPort: 8000
