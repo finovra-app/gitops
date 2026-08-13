@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investments-service
+  labels:
+    app: investments-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: investments-service
+  template:
+    metadata:
+      labels:
+        app: investments-service
+    spec:
+      containers:
+        - name: investments-service
+          image: arsr319/finovra-investments-service:1.0.0
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PORT
+              value: "8000"
+            - name: VERSION
+              value: "1.0.0"
+            - name: FAIL_MODE
+              value: "false"
+            - name: LATENCY_MS
+              value: "0"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
