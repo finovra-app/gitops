@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: finoxa
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/finoxa-argocd/gitops.git
+    targetRevision: main
+    path: k8s/plain-manifests
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: finoxa
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
