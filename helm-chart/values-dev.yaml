@@ -1,0 +1,3 @@
+# Example environment-specific overrides file, layered on top of values.yaml.
+dashboard:
+  replicas: 2
