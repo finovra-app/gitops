@@ -1,11 +1,11 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: dashboard
   labels:
     app: dashboard
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: dashboard
@@ -16,14 +16,16 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: arsr319/finovra-dashboard:1.0.0
+          image: arsr319/finovra-dashboard:1.0.2
           ports:
             - containerPort: 3000
           env:
             - name: PORT
               value: "3000"
             - name: VERSION
-              value: "1.0.0"
+              value: "1.0.2"
+            - name: FAIL_MODE
+              value: "false"
             - name: SERVICES
               value: "accounts:http://accounts-service:8000,insurance:http://insurance-service:8000,investments:http://investments-service:8000,loans:http://loans-service:8000"
           livenessProbe:
@@ -43,3 +45,12 @@ spec:
             limits:
               cpu: 100m
               memory: 128Mi
+  strategy:
+    canary:
+      canaryService: dashboard-canary
+      stableService: dashboard-stable
+      steps:
+        - setWeight: 50
+        - analysis:
+            templates:
+              - templateName: dashboard-healthz-check

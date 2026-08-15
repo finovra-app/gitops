@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: dashboard-healthz-check
+spec:
+  metrics:
+    - name: healthz-ok
+      interval: 10s
+      count: 3
+      successCondition: result == "ok"
+      provider:
+        web:
+          url: "http://dashboard-canary.finovra.svc.cluster.local:3000/healthz"
+          jsonPath: "{$.status}"
