@@ -8,9 +8,13 @@ spec:
   source:
     repoURL: https://github.com/finovra-app/gitops.git
     targetRevision: main
-    path: k8s/plain-manifests
-    directory:
-      recurse: true
+#    path: k8s/plain-manifests
+    path: helm-chart
+    helm:
+      valueFiles:
+        - values-dev.yaml
+ #   directory:
+#     recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: finovra

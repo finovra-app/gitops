@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-canary
+spec:
+  selector:
+    app: dashboard
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard-stable
+spec:
+  selector:
+    app: dashboard
+  ports:
+    - port: 3000
+      targetPort: 3000
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: dashboard-healthz-check
+spec:
+  metrics:
+    - name: healthz-ok
+      interval: 10s
+      count: 3
+      successCondition: result == "ok"
+      provider:
+        web:
+          url: "http://dashboard-canary.finovra.svc.cluster.local:3000/healthz"
+          jsonPath: "{$.status}"
