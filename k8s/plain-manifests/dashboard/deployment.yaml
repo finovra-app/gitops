@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: dashboard
-          image: arsr319/finovra-dashboard:1.0.0
+          image: arsr319/finovra-dashboard:1.0.1
           ports:
             - containerPort: 3000
           env:
             - name: PORT
               value: "3000"
             - name: VERSION
-              value: "1.0.0"
+              value: "1.0.1"
             - name: SERVICES
               value: "accounts:http://accounts-service:8000,insurance:http://insurance-service:8000,investments:http://investments-service:8000,loans:http://loans-service:8000"
           livenessProbe:
