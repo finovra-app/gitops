@@ -3,10 +3,9 @@ image:
   tag: "1.0.0"
 
 dashboard:
-  replicas: 2
+  replicas: 1
   image:
-    tag: "1.0.2"
-  failMode: "false"
+    tag: ""   # empty = fall back to the global image.tag above
   resources:
     requests:
       cpu: 50m
