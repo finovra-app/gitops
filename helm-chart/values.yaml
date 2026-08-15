@@ -5,7 +5,7 @@ image:
 dashboard:
   replicas: 1
   image:
-    tag: ""   # empty = fall back to the global image.tag above
+    tag: "1.0.1"
   resources:
     requests:
       cpu: 50m
