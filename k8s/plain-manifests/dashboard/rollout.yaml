@@ -25,7 +25,7 @@ spec:
             - name: VERSION
               value: "1.0.2"
             - name: FAIL_MODE
-              value: "true"
+              value: "false"
             - name: SERVICES
               value: "accounts:http://accounts-service:8000,insurance:http://insurance-service:8000,investments:http://investments-service:8000,loans:http://loans-service:8000"
           livenessProbe:
