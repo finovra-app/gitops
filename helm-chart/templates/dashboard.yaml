@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: dashboard
   labels:
@@ -38,6 +38,15 @@ spec:
             initialDelaySeconds: 3
           resources:
             {{- toYaml .Values.dashboard.resources | nindent 12 }}
+  strategy:
+    canary:
+      canaryService: dashboard-canary
+      stableService: dashboard-stable
+      steps:
+        - setWeight: 50
+        - analysis:
+            templates:
+              - templateName: dashboard-healthz-check
 ---
 apiVersion: v1
 kind: Service
