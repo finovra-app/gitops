@@ -43,7 +43,7 @@ spec:
       canaryService: dashboard-canary
       stableService: dashboard-stable
       steps:
-        - setWeight: 100
+        - setWeight: 50
         - analysis:
             templates:
               - templateName: dashboard-healthz-check
