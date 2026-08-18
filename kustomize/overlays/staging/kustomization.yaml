@@ -4,11 +4,9 @@ kind: Kustomization
 resources:
   - ../../base
 
-patches:
-  - path: dashboard-replicas-patch.yaml
-    target:
-      kind: Deployment
-      name: dashboard
+replicas:
+  - name: dashboard
+    count: 2
 
 images:
   - name: arsr319/finovra-dashboard
