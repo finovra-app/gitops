@@ -10,4 +10,4 @@ replicas:
 
 images:
   - name: arsr319/finovra-dashboard
-    newTag: "1.0.0"
+    newTag: "1.0.2"
