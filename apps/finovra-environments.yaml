@@ -10,12 +10,15 @@ spec:
           - env: dev
             path: helm-chart
             namespace: finovra
+            cluster: in-cluster
           - env: staging
             path: kustomize/overlays/staging
             namespace: finovra-staging
+            cluster: in-cluster
           - env: prod
             path: kustomize/overlays/prod
             namespace: finovra-prod
+            cluster: finovra-prod-cluster
   template:
     metadata:
       name: 'finovra-{{env}}'
@@ -26,7 +29,7 @@ spec:
         targetRevision: main
         path: '{{path}}'
       destination:
-        server: https://kubernetes.default.svc
+        name: '{{cluster}}'
         namespace: '{{namespace}}'
       syncPolicy:
         automated:
