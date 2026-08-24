@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: finovra-environments
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            path: helm-chart
+            namespace: finovra
+          - env: staging
+            path: kustomize/overlays/staging
+            namespace: finovra-staging
+          - env: prod
+            path: kustomize/overlays/prod
+            namespace: finovra-prod
+  template:
+    metadata:
+      name: 'finovra-{{env}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/finovra-app/gitops.git
+        targetRevision: main
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
