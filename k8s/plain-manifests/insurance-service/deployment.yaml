@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: insurance-service
-          image: arsr319/finovra-insurance-service:2.0.0
+          image: arsr319/finovra-insurance-service:1.0.0
           ports:
             - containerPort: 8000
           env:

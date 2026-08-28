@@ -1,22 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: finovra
-  namespace: argocd
+  name: finovra               # This is the name you'll see in the UI/CLI
+  namespace: argocd          # Applications always live in the argocd namespace itself
 spec:
-  project: default
+  project: default           # Which AppProject this belongs to (default for now — the optional Running ArgoCD Safely module covers custom projects)
   source:
     repoURL: https://github.com/finovra-app/gitops.git
-    targetRevision: main
+    targetRevision: main     # Branch, tag, or commit SHA to track
     path: k8s/plain-manifests
     directory:
-      recurse: true
+      recurse: true          # Pick up every service folder under this path
   destination:
-    server: https://kubernetes.default.svc
-    namespace: finovra
+    server: https://kubernetes.default.svc   # "This same cluster" — ArgoCD's own cluster
+    namespace: finovra        # Namespace to deploy into
   syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    automated: {}    
     syncOptions:
-      - CreateNamespace=true
+      - CreateNamespace=true # Let ArgoCD create the namespace if it doesn't exist
