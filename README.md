@@ -14,10 +14,11 @@ gitops/
 │   └── finovra.yaml              # the ArgoCD Application resource
 └── k8s/
     └── plain-manifests/
-        ├── dashboard/            # Deployment + Service
-        └── accounts-service/     # Deployment + Service
-                                   # (insurance-service, investments-service,
-                                   #  loans-service added module by module)
+        ├── dashboard/             # Deployment + Service
+        ├── accounts-service/      # Deployment + Service
+        ├── insurance-service/     # Deployment + Service
+        ├── investments-service/   # Deployment + Service
+        └── loans-service/         # Deployment + Service
 ```
 
 ## Why two repos?
