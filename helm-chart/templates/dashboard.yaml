@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  labels:
+    app: dashboard
+spec:
+  replicas: {{ .Values.dashboard.replicas }}
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: "{{ .Values.image.repository }}/finovra-dashboard:{{ .Values.dashboard.image.tag | default .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.dashboard.service.port }}
+          env:
+            - name: PORT
+              value: "{{ .Values.dashboard.service.port }}"
+            - name: VERSION
+              value: "{{ .Values.dashboard.image.tag | default .Values.image.tag }}"
+            - name: SERVICES
+              value: "accounts:http://accounts-service:{{ (index .Values "accounts-service").service.port }},insurance:http://insurance-service:{{ (index .Values "insurance-service").service.port }},investments:http://investments-service:{{ (index .Values "investments-service").service.port }},loans:http://loans-service:{{ (index .Values "loans-service").service.port }}"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.dashboard.service.port }}
+            initialDelaySeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.dashboard.service.port }}
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  labels:
+    app: dashboard
+spec:
+  selector:
+    app: dashboard
+  ports:
+    - port: {{ .Values.dashboard.service.port }}
+      targetPort: {{ .Values.dashboard.service.port }}

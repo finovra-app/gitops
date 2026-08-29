@@ -1,0 +1,48 @@
+# Global defaults — every service falls back to these unless it sets its own
+# image.tag under its own key (see templates/*.yaml for the `| default` pattern).
+image:
+  repository: arsr319
+  tag: "1.0.0"
+
+dashboard:
+  replicas: 1
+  image:
+    tag: ""
+  service:
+    port: 3000
+
+accounts-service:
+  replicas: 1
+  image:
+    tag: ""
+  service:
+    port: 8000
+  failMode: "false"
+  latencyMs: "0"
+
+insurance-service:
+  replicas: 1
+  image:
+    tag: ""
+  service:
+    port: 8000
+  failMode: "false"
+  latencyMs: "0"
+
+investments-service:
+  replicas: 1
+  image:
+    tag: ""
+  service:
+    port: 8000
+  failMode: "false"
+  latencyMs: "0"
+
+loans-service:
+  replicas: 1
+  image:
+    tag: ""
+  service:
+    port: 8000
+  failMode: "false"
+  latencyMs: "0"

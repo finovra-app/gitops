@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loans-service
+  labels:
+    app: loans-service
+spec:
+  replicas: {{ (index .Values "loans-service").replicas }}
+  selector:
+    matchLabels:
+      app: loans-service
+  template:
+    metadata:
+      labels:
+        app: loans-service
+    spec:
+      containers:
+        - name: loans-service
+          image: "{{ .Values.image.repository }}/finovra-loans-service:{{ (index .Values "loans-service").image.tag | default .Values.image.tag }}"
+          ports:
+            - containerPort: {{ (index .Values "loans-service").service.port }}
+          env:
+            - name: PORT
+              value: "{{ (index .Values "loans-service").service.port }}"
+            - name: VERSION
+              value: "{{ (index .Values "loans-service").image.tag | default .Values.image.tag }}"
+            - name: FAIL_MODE
+              value: "{{ (index .Values "loans-service").failMode }}"
+            - name: LATENCY_MS
+              value: "{{ (index .Values "loans-service").latencyMs }}"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values "loans-service").service.port }}
+            initialDelaySeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values "loans-service").service.port }}
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loans-service
+  labels:
+    app: loans-service
+spec:
+  selector:
+    app: loans-service
+  ports:
+    - port: {{ (index .Values "loans-service").service.port }}
+      targetPort: {{ (index .Values "loans-service").service.port }}

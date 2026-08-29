@@ -1,0 +1,6 @@
+apiVersion: v2
+name: finovra
+description: Helm chart for the Finovra microservices demo app
+type: application
+version: 0.1.0
+appVersion: "1.0.0"

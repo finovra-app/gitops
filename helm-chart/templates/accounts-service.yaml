@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-service
+  labels:
+    app: accounts-service
+spec:
+  replicas: {{ (index .Values "accounts-service").replicas }}
+  selector:
+    matchLabels:
+      app: accounts-service
+  template:
+    metadata:
+      labels:
+        app: accounts-service
+    spec:
+      containers:
+        - name: accounts-service
+          image: "{{ .Values.image.repository }}/finovra-accounts-service:{{ (index .Values "accounts-service").image.tag | default .Values.image.tag }}"
+          ports:
+            - containerPort: {{ (index .Values "accounts-service").service.port }}
+          env:
+            - name: PORT
+              value: "{{ (index .Values "accounts-service").service.port }}"
+            - name: VERSION
+              value: "{{ (index .Values "accounts-service").image.tag | default .Values.image.tag }}"
+            - name: FAIL_MODE
+              value: "{{ (index .Values "accounts-service").failMode }}"
+            - name: LATENCY_MS
+              value: "{{ (index .Values "accounts-service").latencyMs }}"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values "accounts-service").service.port }}
+            initialDelaySeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ (index .Values "accounts-service").service.port }}
+            initialDelaySeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts-service
+  labels:
+    app: accounts-service
+spec:
+  selector:
+    app: accounts-service
+  ports:
+    - port: {{ (index .Values "accounts-service").service.port }}
+      targetPort: {{ (index .Values "accounts-service").service.port }}
