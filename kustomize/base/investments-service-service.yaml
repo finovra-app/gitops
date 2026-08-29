@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: investments-service
+  labels:
+    app: investments-service
+spec:
+  selector:
+    app: investments-service
+  ports:
+    - port: 8000
+      targetPort: 8000

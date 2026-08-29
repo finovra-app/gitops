@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - dashboard-deployment.yaml
+  - dashboard-service.yaml
+  - accounts-service-deployment.yaml
+  - accounts-service-service.yaml
+  - insurance-service-deployment.yaml
+  - insurance-service-service.yaml
+  - investments-service-deployment.yaml
+  - investments-service-service.yaml
+  - loans-service-deployment.yaml
+  - loans-service-service.yaml
+
+labels:
+  - pairs:
+      managed-by: kustomize
+    includeSelectors: false
