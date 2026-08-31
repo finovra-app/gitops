@@ -9,6 +9,9 @@ spec:
     repoURL: https://github.com/finovra-app/gitops.git
     targetRevision: main     # Branch, tag, or commit SHA to track
     path: helm-chart
+    helm:
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc   # "This same cluster" — ArgoCD's own cluster
     namespace: finovra        # Namespace to deploy into
