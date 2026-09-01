@@ -1,0 +1,4 @@
+# Example override file for Module 4, Step 7 — bumps only the dashboard's
+# replica count, leaving every other value from values.yaml untouched.
+dashboard:
+  replicas: 4
