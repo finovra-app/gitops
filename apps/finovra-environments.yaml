@@ -8,17 +8,17 @@ spec:
     - list:
         elements:
           - env: dev
-            path: helm-chart
             namespace: finovra
-            cluster: in-cluster
+            valuesFile: values-dev.yaml
+          - env: qa
+            namespace: finovra-qa
+            valuesFile: values-qa.yaml
           - env: staging
-            path: kustomize/overlays/staging
             namespace: finovra-staging
-            cluster: in-cluster
-          - env: prod
-            path: kustomize/overlays/prod
-            namespace: finovra-prod
-            cluster: finovra-prod-cluster
+            valuesFile: values-staging.yaml
+          # - env: prod
+          #   namespace: finovra-prod
+          #   valuesFile: values-prod.yaml
   template:
     metadata:
       name: 'finovra-{{env}}'
@@ -27,9 +27,12 @@ spec:
       source:
         repoURL: https://github.com/finovra-app/gitops.git
         targetRevision: main
-        path: '{{path}}'
+        path: helm-chart
+        helm:
+          valueFiles:
+            - '{{valuesFile}}'
       destination:
-        name: '{{cluster}}'
+        server: https://kubernetes.default.svc
         namespace: '{{namespace}}'
       syncPolicy:
         automated:
