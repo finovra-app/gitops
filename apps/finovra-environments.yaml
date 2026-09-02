@@ -10,15 +10,19 @@ spec:
           - env: dev
             namespace: finovra
             valuesFile: values-dev.yaml
+            cluster: in-cluster
           - env: qa
             namespace: finovra-qa
             valuesFile: values-qa.yaml
+            cluster: in-cluster
           - env: staging
             namespace: finovra-staging
             valuesFile: values-staging.yaml
-          # - env: prod
-          #   namespace: finovra-prod
-          #   valuesFile: values-prod.yaml
+            cluster: in-cluster
+          - env: prod
+            namespace: finovra-prod
+            valuesFile: values-prod.yaml
+            cluster: finovra-prod-cluster
   template:
     metadata:
       name: 'finovra-{{env}}'
@@ -32,7 +36,7 @@ spec:
           valueFiles:
             - '{{valuesFile}}'
       destination:
-        server: https://kubernetes.default.svc
+        name: '{{cluster}}'
         namespace: '{{namespace}}'
       syncPolicy:
         automated:
