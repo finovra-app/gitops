@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: finovra-environments
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            namespace: finovra
+            valuesFile: values-dev.yaml
+          - env: qa
+            namespace: finovra-qa
+            valuesFile: values-qa.yaml
+          - env: staging
+            namespace: finovra-staging
+            valuesFile: values-staging.yaml
+  template:
+    metadata:
+      name: 'finovra-{{env}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/finovra-app/gitops.git
+        targetRevision: main
+        path: helm-chart
+        helm:
+          valueFiles:
+            - '{{valuesFile}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
