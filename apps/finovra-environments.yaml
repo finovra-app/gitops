@@ -16,6 +16,9 @@ spec:
           - env: staging
             namespace: finovra-staging
             valuesFile: values-staging.yaml
+          - env: prod
+            namespace: finovra-prod
+            valuesFile: values-prod.yaml
   template:
     metadata:
       name: 'finovra-{{env}}'
